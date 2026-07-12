@@ -1,3 +1,4 @@
+using AssetFlow.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -8,10 +9,11 @@ builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
 builder.Services.AddOpenApi();
+builder.Services.AddHttpContextAccessor();
+//builder.Services.AddScoped<ICurrentTenant, HttpCurrentTenant>();
 
-//builder.Services.AddDbContext<AppDbContext>(options =>
-//    options.UseNpgsql(
-//        builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<AssetFlowDbContext>(opt =>
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
