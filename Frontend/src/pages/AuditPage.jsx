@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react';
-import { HiDownload, HiFilter } from 'react-icons/hi';
-import { MOCK_AUDIT_LOGS } from '../constants/mockData';
+import { useState, useMemo, useEffect } from 'react';
+import { HiDownload } from 'react-icons/hi';
+import auditService from '../services/auditService';
 import DataTable from '../components/common/DataTable';
 import SearchBar from '../components/common/SearchBar';
 import Select from '../components/common/Select';
@@ -24,22 +24,28 @@ const ACTION_VARIANT = {
   'Asset Returned':       'muted',
 };
 
-const ACTION_TYPES = ['All Actions', ...new Set(MOCK_AUDIT_LOGS.map((l) => l.action))];
+const ACTION_TYPES = ['All Actions', 'Asset Allocated', 'Booking Created', 'Maintenance Raised', 'Transfer Approved', 'Asset Registered', 'Employee Added', 'Department Updated', 'Maintenance Resolved', 'Booking Cancelled', 'Asset Returned'];
 
 export default function AuditPage() {
   const { toast } = useToast();
+  const [logs,   setLogs]   = useState([]);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('');
   const [page,   setPage]   = useState(1);
 
+  // Fetch audit logs from service on mount
+  useEffect(() => {
+    auditService.getLogs().then(setLogs);
+  }, []);
+
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
-    return MOCK_AUDIT_LOGS.filter((log) => {
+    return logs.filter((log) => {
       const matchQ = !q || log.action.toLowerCase().includes(q) || log.entity.toLowerCase().includes(q) || log.user.toLowerCase().includes(q);
       const matchF = !filter || filter === 'All Actions' || log.action === filter;
       return matchQ && matchF;
     });
-  }, [search, filter]);
+  }, [logs, search, filter]);
 
   const paged      = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);

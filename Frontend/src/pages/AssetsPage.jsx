@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
-import { HiPlus, HiEye, HiPencil, HiTrash, HiQrcode } from 'react-icons/hi';
-import { MOCK_ASSETS, MOCK_CATEGORIES, MOCK_DEPARTMENTS } from '../constants/mockData';
+import { HiPlus, HiEye } from 'react-icons/hi';
+import { useAssets } from '../hooks/useAssets';
+import { INITIAL_CATEGORIES, INITIAL_DEPARTMENTS } from '../data/dummyData';
 import DataTable from '../components/common/DataTable';
 import Badge, { statusVariant } from '../components/common/Badge';
 import Button from '../components/common/Button';
@@ -55,8 +56,8 @@ function RegisterAssetModal({ isOpen, onClose, onSave }) {
 
   const set = (f) => (e) => setForm({ ...form, [f]: e.target.value });
 
-  const catOptions = MOCK_CATEGORIES.map((c) => ({ label: c.name, value: c.name }));
-  const deptOptions = MOCK_DEPARTMENTS.map((d) => ({ label: d.name, value: d.name }));
+  const catOptions  = INITIAL_CATEGORIES.map((c) => ({ label: c.name, value: c.name }));
+  const deptOptions  = INITIAL_DEPARTMENTS.map((d) => ({ label: d.name, value: d.name }));
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Register New Asset" size="md"
@@ -76,17 +77,17 @@ function RegisterAssetModal({ isOpen, onClose, onSave }) {
 
 export default function AssetsPage() {
   const { toast } = useToast();
-  const [assets,      setAssets]   = useState(MOCK_ASSETS);
-  const [search,      setSearch]   = useState('');
-  const [filterCat,   setFilterCat]= useState('');
-  const [filterStatus,setFilterStatus] = useState('');
-  const [filterDept,  setFilterDept]   = useState('');
-  const [page,        setPage]     = useState(1);
-  const [selected,    setSelected] = useState(null);
-  const [showRegister,setRegister] = useState(false);
+  const { assets, createAsset } = useAssets();
+  const [search,       setSearch]      = useState('');
+  const [filterCat,    setFilterCat]   = useState('');
+  const [filterStatus, setFilterStatus]= useState('');
+  const [filterDept,   setFilterDept]  = useState('');
+  const [page,         setPage]        = useState(1);
+  const [selected,     setSelected]    = useState(null);
+  const [showRegister, setRegister]    = useState(false);
 
-  const catOptions  = [{ label: 'All Categories',  value: '' }, ...MOCK_CATEGORIES.map((c)  => ({ label: c.name,  value: c.name  }))];
-  const deptOptions = [{ label: 'All Departments', value: '' }, ...MOCK_DEPARTMENTS.map((d) => ({ label: d.name,  value: d.name  }))];
+  const catOptions    = [{ label: 'All Categories',  value: '' }, ...INITIAL_CATEGORIES.map((c) => ({ label: c.name, value: c.name }))];
+  const deptOptions   = [{ label: 'All Departments', value: '' }, ...INITIAL_DEPARTMENTS.map((d) => ({ label: d.name, value: d.name }))];
   const statusOptions = [{ label: 'All Statuses', value: '' }, ...STATUS_OPTIONS.map((s) => ({ label: s, value: s }))];
 
   const filtered = useMemo(() => {
@@ -103,9 +104,13 @@ export default function AssetsPage() {
   const paged      = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
 
-  const handleRegister = (newAsset) => {
-    setAssets((prev) => [{ id: Date.now(), ...newAsset }, ...prev]);
-    toast.success(`Asset ${newAsset.tag} registered!`);
+  const handleRegister = async (newAsset) => {
+    try {
+      const created = await createAsset(newAsset);
+      toast.success(`Asset ${created.tag} registered!`);
+    } catch (err) {
+      toast.error(err.message || 'Failed to register asset');
+    }
   };
 
   const columns = [
@@ -128,7 +133,7 @@ export default function AssetsPage() {
           <h2 className="page-title">Assets</h2>
           <p className="page-subtitle">{assets.length} total assets in directory</p>
         </div>
-        <Button icon={HiPlus} onClick={() => setRegister(true)}>+ Register Asset</Button>
+        <Button icon={HiPlus} onClick={() => setRegister(true)}>Register Asset</Button>
       </div>
 
       {/* Filters */}

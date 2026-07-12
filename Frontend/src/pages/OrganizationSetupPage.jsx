@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   HiOfficeBuilding, HiTag, HiUsers, HiPlus, HiPencil, HiTrash,
 } from 'react-icons/hi';
 import { clsx } from 'clsx';
 import {
-  MOCK_DEPARTMENTS, MOCK_CATEGORIES, MOCK_EMPLOYEES,
-} from '../constants/mockData';
+  INITIAL_DEPARTMENTS, INITIAL_CATEGORIES, INITIAL_EMPLOYEES,
+} from '../data/dummyData';
 import DataTable from '../components/common/DataTable';
 import Badge, { statusVariant } from '../components/common/Badge';
 import Button from '../components/common/Button';
@@ -21,14 +21,18 @@ const TABS = [
 ];
 
 /* ---------- Departments Sub-Page ---------- */
-function DepartmentsTab() {
+function DepartmentsTab({ addTrigger }) {
   const { toast } = useToast();
-  const [data,       setData]    = useState(MOCK_DEPARTMENTS);
+  const [data,       setData]    = useState(INITIAL_DEPARTMENTS);
   const [showModal,  setModal]   = useState(false);
   const [editing,    setEditing] = useState(null);
   const [form,       setForm]    = useState({ name: '', head: '', parentDept: '', status: 'Active' });
 
   const openAdd  = ()      => { setEditing(null); setForm({ name:'', head:'', parentDept:'', status:'Active' }); setModal(true); };
+
+  useEffect(() => {
+    if (addTrigger > 0) openAdd();
+  }, [addTrigger]);
   const openEdit = (row)   => { setEditing(row);  setForm({ name: row.name, head: row.head, parentDept: row.parentDept || '', status: row.status }); setModal(true); };
   const save = () => {
     if (editing) {
@@ -81,14 +85,18 @@ function DepartmentsTab() {
 }
 
 /* ---------- Categories Sub-Page ---------- */
-function CategoriesTab() {
+function CategoriesTab({ addTrigger }) {
   const { toast } = useToast();
-  const [data,      setData]   = useState(MOCK_CATEGORIES);
+  const [data,      setData]   = useState(INITIAL_CATEGORIES);
   const [showModal, setModal]  = useState(false);
   const [editing,   setEditing]= useState(null);
   const [form,      setForm]   = useState({ name: '', description: '', status: 'Active' });
 
   const openAdd  = ()    => { setEditing(null); setForm({ name:'', description:'', status:'Active' }); setModal(true); };
+
+  useEffect(() => {
+    if (addTrigger > 0) openAdd();
+  }, [addTrigger]);
   const openEdit = (row) => { setEditing(row);  setForm({ name: row.name, description: row.description, status: row.status }); setModal(true); };
   const save = () => {
     if (editing) {
@@ -130,14 +138,18 @@ function CategoriesTab() {
 }
 
 /* ---------- Employees Sub-Page ---------- */
-function EmployeesTab() {
+function EmployeesTab({ addTrigger }) {
   const { toast } = useToast();
-  const [data,      setData]    = useState(MOCK_EMPLOYEES);
+  const [data,      setData]    = useState(INITIAL_EMPLOYEES);
   const [showModal, setModal]   = useState(false);
   const [editing,   setEditing] = useState(null);
   const [form,      setForm]    = useState({ name:'', email:'', department:'', role:'Employee', status:'Active' });
 
   const openAdd  = ()    => { setEditing(null); setForm({ name:'',email:'',department:'',role:'Employee',status:'Active' }); setModal(true); };
+
+  useEffect(() => {
+    if (addTrigger > 0) openAdd();
+  }, [addTrigger]);
   const openEdit = (row) => { setEditing(row);  setForm({ name:row.name,email:row.email,department:row.department,role:row.role,status:row.status }); setModal(true); };
   const save = () => {
     if (editing) {
@@ -186,11 +198,12 @@ function EmployeesTab() {
 /* ==================== Main Page ==================== */
 export default function OrganizationSetupPage() {
   const [activeTab, setActiveTab] = useState('departments');
+  const [addTrigger, setAddTrigger] = useState(0);
 
   const tabMap = {
-    departments: { component: DepartmentsTab, addLabel: '+ Add Department' },
-    categories:  { component: CategoriesTab,  addLabel: '+ Add Category'   },
-    employees:   { component: EmployeesTab,   addLabel: '+ Add Employee'   },
+    departments: { component: DepartmentsTab, addLabel: 'Add Department' },
+    categories:  { component: CategoriesTab,  addLabel: 'Add Category'   },
+    employees:   { component: EmployeesTab,   addLabel: 'Add Employee'   },
   };
 
   const ActiveComponent = tabMap[activeTab].component;
@@ -210,7 +223,7 @@ export default function OrganizationSetupPage() {
           {TABS.map((tab) => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => { setActiveTab(tab.key); setAddTrigger(0); }}
               className={clsx('tab-item flex items-center gap-2', activeTab === tab.key && 'active')}
             >
               <tab.icon size={14} />
@@ -218,14 +231,14 @@ export default function OrganizationSetupPage() {
             </button>
           ))}
         </div>
-        <Button icon={HiPlus} variant="primary">
+        <Button icon={HiPlus} variant="primary" onClick={() => setAddTrigger((t) => t + 1)}>
           {tabMap[activeTab].addLabel}
         </Button>
       </div>
 
       {/* Content */}
       <div className="card p-5 animate-fade-in">
-        <ActiveComponent />
+        <ActiveComponent addTrigger={addTrigger} />
       </div>
     </div>
   );

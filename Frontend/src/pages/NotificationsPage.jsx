@@ -3,7 +3,7 @@ import {
   HiCheckCircle, HiExclamationCircle, HiInformationCircle,
   HiExclamation, HiBell, HiCheck,
 } from 'react-icons/hi';
-import { MOCK_NOTIFICATIONS } from '../constants/mockData';
+import { useNotifications } from '../hooks/useNotifications';
 import { clsx } from 'clsx';
 import Button from '../components/common/Button';
 import { useToast } from '../context/ToastContext';
@@ -17,20 +17,17 @@ const TYPE_CONFIG = {
 
 export default function NotificationsPage() {
   const { toast } = useToast();
-  const [notifs, setNotifs] = useState(MOCK_NOTIFICATIONS);
+  const { notifications: notifs, markRead, markAllRead } = useNotifications();
   const [filter, setFilter] = useState('all'); // all | unread | read
 
-  const markRead = (id) => {
-    setNotifs((n) => n.map((item) => item.id === id ? { ...item, read: true } : item));
-  };
-
-  const markAll = () => {
-    setNotifs((n) => n.map((item) => ({ ...item, read: true })));
+  const markAll = async () => {
+    await markAllRead();
     toast.success('All notifications marked as read.');
   };
 
   const dismiss = (id) => {
-    setNotifs((n) => n.filter((item) => item.id !== id));
+    // Optimistic dismiss — in real backend: DELETE /api/notifications/:id
+    markRead(id);
   };
 
   const filtered = notifs.filter((n) => {

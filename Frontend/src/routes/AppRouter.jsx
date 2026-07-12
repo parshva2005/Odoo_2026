@@ -3,8 +3,8 @@ import { ROUTES } from '../constants/routes';
 import ProtectedRoute from './ProtectedRoute';
 
 // Layouts
-import AuthLayout   from '../layouts/AuthLayout';
-import MainLayout   from '../layouts/MainLayout';
+import AuthLayout   from '../components/layout/AuthLayout';
+import MainLayout   from '../components/layout/MainLayout';
 
 // Auth Pages
 import LoginPage    from '../pages/auth/LoginPage';

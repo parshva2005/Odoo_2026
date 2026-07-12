@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   HiArchive, HiSwitchHorizontal, HiCalendar, HiCog,
@@ -6,11 +6,7 @@ import {
   HiTrendingUp, HiRefresh, HiX, HiArrowRight,
 } from 'react-icons/hi';
 import { StatCard } from '../components/common/Card';
-import {
-  MOCK_DASHBOARD_STATS,
-  MOCK_RECENT_ACTIVITY,
-  MOCK_ASSET_USAGE,
-} from '../constants/mockData';
+import dashboardService from '../services/dashboardService';
 import { ROUTES } from '../constants/routes';
 import Button from '../components/common/Button';
 import {
@@ -44,25 +40,35 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 export default function DashboardPage() {
   const navigate = useNavigate();
-  const s = MOCK_DASHBOARD_STATS;
-
-  const stats = [
-    { label: 'Available Assets',  value: s.availableAssets,  icon: HiArchive,         iconBg: 'bg-success/15 text-success' },
-    { label: 'Allocated Assets',  value: s.allocatedAssets,  icon: HiClipboardCheck,  iconBg: 'bg-info/15 text-info' },
-    { label: 'In Maintenance',    value: s.maintenanceAssets,icon: HiCog,           iconBg: 'bg-warning/15 text-warning' },
-    { label: 'Active Bookings',   value: s.activeBookings,   icon: HiCalendar,        iconBg: 'bg-primary/15 text-primary' },
-    { label: 'Pending Transfers', value: s.pendingTransfers, icon: HiSwitchHorizontal,iconBg: 'bg-purple-500/15 text-purple-400' },
-    { label: 'Upcoming Returns',  value: s.upcomingReturns,  icon: HiRefresh,         iconBg: 'bg-orange-500/15 text-orange-400' },
-  ];
-
+  const [stats, setStats]           = useState([]);
+  const [chartData, setChartData]   = useState([]);
+  const [activity, setActivity]     = useState([]);
+  const [overdue, setOverdue]       = useState(0);
   const [alertDismissed, setAlertDismissed] = useState(false);
+
+  // Fetch all dashboard data from service on mount
+  useEffect(() => {
+    dashboardService.getStats().then((s) => {
+      setOverdue(s.overdueAssets);
+      setStats([
+        { label: 'Available Assets',  value: s.availableAssets,   icon: HiArchive,          iconBg: 'bg-success/15 text-success' },
+        { label: 'Allocated Assets',  value: s.allocatedAssets,   icon: HiClipboardCheck,   iconBg: 'bg-info/15 text-info' },
+        { label: 'In Maintenance',    value: s.maintenanceAssets, icon: HiCog,              iconBg: 'bg-warning/15 text-warning' },
+        { label: 'Active Bookings',   value: s.activeBookings,    icon: HiCalendar,         iconBg: 'bg-primary/15 text-primary' },
+        { label: 'Pending Transfers', value: s.pendingTransfers,  icon: HiSwitchHorizontal, iconBg: 'bg-purple-500/15 text-purple-400' },
+        { label: 'Upcoming Returns',  value: s.upcomingReturns,   icon: HiRefresh,          iconBg: 'bg-orange-500/15 text-orange-400' },
+      ]);
+    });
+    dashboardService.getAssetUsageChart().then(setChartData);
+    dashboardService.getRecentActivity().then(setActivity);
+  }, []);
 
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Page Header */}
       <div className="page-header">
         <div>
-          <h2 className="page-title">Today's Overview</h2>
+          <h2 className="page-title">Today&apos;s Overview</h2>
           <p className="page-subtitle">Real-time asset and resource summary</p>
         </div>
         <div className="text-xs text-content-muted">
@@ -71,14 +77,14 @@ export default function DashboardPage() {
       </div>
 
       {/* Overdue Alert — dismissible */}
-      {s.overdueAssets > 0 && !alertDismissed && (
+      {overdue > 0 && !alertDismissed && (
         <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-lg
                         bg-danger/10 border border-danger/25 text-danger text-sm
                         animate-slide-in-up">
           <div className="flex items-center gap-2">
             <HiExclamationCircle size={18} className="shrink-0" />
             <span>
-              <strong>{s.overdueAssets} assets overdue for return</strong>
+              <strong>{overdue} assets overdue for return</strong>
               {' '}— flagged for follow-up
             </span>
           </div>
@@ -144,7 +150,7 @@ export default function DashboardPage() {
             </h3>
           </div>
           <ResponsiveContainer width="100%" height={220}>
-            <AreaChart data={MOCK_ASSET_USAGE} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+            <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorAlloc" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%"  stopColor="#10b981" stopOpacity={0.3} />
@@ -171,7 +177,7 @@ export default function DashboardPage() {
         <div className="card p-5">
           <h3 className="text-sm font-semibold text-content-primary mb-4">Recent Activity</h3>
           <div className="space-y-3">
-            {MOCK_RECENT_ACTIVITY.map((item) => {
+            {activity.map((item) => {
               const cfg = activityIcons[item.type] || activityIcons.asset;
               const Icon = cfg.icon;
               return (

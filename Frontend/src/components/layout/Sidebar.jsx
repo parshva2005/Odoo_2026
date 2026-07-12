@@ -6,22 +6,22 @@ import {
 } from 'react-icons/hi';
 import { clsx } from 'clsx';
 import { useState } from 'react';
-import { ROUTES } from '../constants/routes';
-import { useAuth } from '../context/AuthContext';
-import { useToast } from '../context/ToastContext';
-import Modal from '../components/common/Modal';
-import Button from '../components/common/Button';
+import { ROUTES } from '../../constants/routes';
+import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
+import Modal from '../common/Modal';
+import Button from '../common/Button';
 
 const NAV_ITEMS = [
-  { label: 'Dashboard',          icon: HiViewGridAdd,       to: ROUTES.DASHBOARD  },
-  { label: 'Organization Setup', icon: HiOfficeBuilding,    to: ROUTES.ORG_SETUP, adminOnly: true },
-  { label: 'Assets',             icon: HiArchive,           to: ROUTES.ASSETS     },
-  { label: 'Allocation & Transfer', icon: HiSwitchHorizontal, to: ROUTES.ALLOCATION },
-  { label: 'Resource Booking',   icon: HiCalendar,          to: ROUTES.BOOKING    },
-  { label: 'Maintenance',        icon: HiCog,               to: ROUTES.MAINTENANCE },
-  { label: 'Audit',              icon: HiClipboardList,     to: ROUTES.AUDIT, adminOnly: true },
-  { label: 'Reports',            icon: HiChartBar,          to: ROUTES.REPORTS    },
-  { label: 'Notifications',      icon: HiBell,              to: ROUTES.NOTIFICATIONS },
+  { label: 'Dashboard',            icon: HiViewGridAdd,       to: ROUTES.DASHBOARD  },
+  { label: 'Organization Setup',   icon: HiOfficeBuilding,    to: ROUTES.ORG_SETUP, adminOnly: true },
+  { label: 'Assets',               icon: HiArchive,           to: ROUTES.ASSETS     },
+  { label: 'Allocation & Transfer',icon: HiSwitchHorizontal,  to: ROUTES.ALLOCATION },
+  { label: 'Resource Booking',     icon: HiCalendar,          to: ROUTES.BOOKING    },
+  { label: 'Maintenance',          icon: HiCog,               to: ROUTES.MAINTENANCE },
+  { label: 'Audit',                icon: HiClipboardList,     to: ROUTES.AUDIT, adminOnly: true },
+  { label: 'Reports',              icon: HiChartBar,          to: ROUTES.REPORTS    },
+  { label: 'Notifications',        icon: HiBell,              to: ROUTES.NOTIFICATIONS },
 ];
 
 export default function Sidebar({ collapsed, onToggle, notifCount = 0 }) {
@@ -66,7 +66,7 @@ export default function Sidebar({ collapsed, onToggle, notifCount = 0 }) {
             end={item.to === '/'}
             className={({ isActive }) =>
               clsx(
-                'sidebar-nav-item group',
+                'sidebar-nav-item group relative',
                 isActive && 'active',
                 collapsed && 'justify-center px-2'
               )
@@ -120,13 +120,13 @@ export default function Sidebar({ collapsed, onToggle, notifCount = 0 }) {
       {/* Collapse Toggle */}
       <button
         onClick={onToggle}
-        className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full
+        className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full
                    bg-surface-elevated border border-surface-border
                    flex items-center justify-center text-content-muted
                    hover:text-content-primary hover:border-primary/30 transition-all z-10
                    shadow-card"
       >
-        {collapsed ? <HiChevronRight size={12} /> : <HiChevronLeft size={12} />}
+        {collapsed ? <HiChevronRight size={16} /> : <HiChevronLeft size={16} />}
       </button>
 
       {/* Logout Confirmation Modal */}
