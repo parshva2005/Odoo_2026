@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { HiPlus, HiUser } from 'react-icons/hi';
 import { clsx } from 'clsx';
-import { MOCK_MAINTENANCE } from '../constants/mockData';
+import { INITIAL_ASSETS, INITIAL_MAINTENANCE } from '../data/dummyData';
 import Button from '../components/common/Button';
 import Modal from '../components/common/Modal';
-import Input from '../components/common/Input';
 import Select from '../components/common/Select';
 import Badge from '../components/common/Badge';
 import { useToast } from '../context/ToastContext';
-import { MOCK_ASSETS, MOCK_EMPLOYEES } from '../constants/mockData';
 
 const STAGES = ['Pending', 'Approved', 'Technician Assigned', 'In Progress', 'Resolved'];
 
@@ -88,7 +86,7 @@ function TicketCard({ ticket, onMove, stages, currentStage }) {
 function RaiseTicketModal({ isOpen, onClose, onSubmit }) {
   const [form, setForm] = useState({ assetTag: '', issue: '', priority: 'Medium' });
 
-  const assetOptions = MOCK_ASSETS.map((a) => ({ value: a.tag, label: `${a.tag} – ${a.name}` }));
+  const assetOptions = INITIAL_ASSETS.map((a) => ({ value: a.tag, label: `${a.tag} – ${a.name}` }));
 
   const handleSubmit = () => {
     if (!form.assetTag || !form.issue.trim()) return;
@@ -124,7 +122,19 @@ function RaiseTicketModal({ isOpen, onClose, onSubmit }) {
 
 export default function MaintenancePage() {
   const { toast } = useToast();
-  const [board,      setBoard]   = useState(MOCK_MAINTENANCE);
+
+  // Convert flat array from dummyData into Kanban board object grouped by status
+  const buildBoard = (tickets) => {
+    const board = {};
+    STAGES.forEach((s) => { board[s] = []; });
+    tickets.forEach((t) => {
+      const stage = STAGES.includes(t.status) ? t.status : 'Pending';
+      board[stage].push(t);
+    });
+    return board;
+  };
+
+  const [board,      setBoard]   = useState(() => buildBoard(INITIAL_MAINTENANCE));
   const [showModal,  setModal]   = useState(false);
 
   const moveCard = (ticket, from, to) => {
@@ -141,7 +151,7 @@ export default function MaintenancePage() {
   };
 
   const handleNewTicket = (form) => {
-    const asset = MOCK_ASSETS.find((a) => a.tag === form.assetTag);
+    const asset = INITIAL_ASSETS.find((a) => a.tag === form.assetTag);
     const ticket = {
       id:         Date.now(),
       tag:        form.assetTag,
@@ -167,9 +177,8 @@ export default function MaintenancePage() {
         <Button icon={HiPlus} onClick={() => setModal(true)}>Raise Ticket</Button>
       </div>
 
-      {/* Hint */}
       <p className="text-xs text-content-muted italic">
-        Approving a card moves the asset to "Under Maintenance" · Resolving returns it to "Available"
+        Approving a card moves the asset to &quot;Under Maintenance&quot; · Resolving returns it to &quot;Available&quot;
       </p>
 
       {/* Kanban Board */}

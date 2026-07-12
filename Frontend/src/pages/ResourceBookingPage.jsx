@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { HiCalendar, HiExclamationCircle, HiCheckCircle, HiPlus } from 'react-icons/hi';
-import { MOCK_RESOURCES, MOCK_BOOKINGS } from '../constants/mockData';
+import { INITIAL_RESOURCES, INITIAL_BOOKINGS } from '../data/dummyData';
 import Select from '../components/common/Select';
 import Button from '../components/common/Button';
 import Modal from '../components/common/Modal';
 import Input from '../components/common/Input';
 import { useToast } from '../context/ToastContext';
-import { clsx } from 'clsx';
 
 // Generate time slots 08:00 – 20:00
 const TIME_SLOTS = Array.from({ length: 13 }, (_, i) => {
@@ -33,7 +32,7 @@ function BookingModal({ isOpen, onClose, onBook, resourceId }) {
   const [form, setForm] = useState({ date: '', startTime: '09:00', endTime: '10:00', team: '' });
   const [conflict, setConflict] = useState(false);
 
-  const dayBookings = MOCK_BOOKINGS.filter(
+  const dayBookings = INITIAL_BOOKINGS.filter(
     (b) => b.resourceId === resourceId && b.date === form.date
   );
 
@@ -107,15 +106,12 @@ export default function ResourceBookingPage() {
   const [viewDate,           setViewDate]   = useState(
     new Date().toISOString().slice(0, 10)
   );
-  const [bookings, setBookings] = useState(MOCK_BOOKINGS);
+  const [bookings, setBookings] = useState(INITIAL_BOOKINGS);
   const [showModal, setModal]   = useState(false);
 
-  const resource = MOCK_RESOURCES.find((r) => String(r.id) === selectedResourceId);
+  const resource = INITIAL_RESOURCES.find((r) => String(r.id) === selectedResourceId);
 
-  const resourceOptions = MOCK_RESOURCES.map((r) => ({
-    value: String(r.id),
-    label: `${r.name} – ${new Date(viewDate).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}`,
-  }));
+
 
   const dayBookings = bookings.filter(
     (b) => b.resourceId === Number(selectedResourceId) && b.date === viewDate
@@ -156,7 +152,7 @@ export default function ResourceBookingPage() {
             label="Resource"
             value={selectedResourceId}
             onChange={(e) => setResourceId(e.target.value)}
-            options={MOCK_RESOURCES.map((r) => ({ value: String(r.id), label: r.name }))}
+            options={INITIAL_RESOURCES.map((r) => ({ value: String(r.id), label: r.name }))}
             placeholder="Select a resource…"
             required
           />

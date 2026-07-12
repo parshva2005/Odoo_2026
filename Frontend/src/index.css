@@ -26,7 +26,7 @@
 
   ::selection { @apply bg-primary/30 text-content-primary; }
 
-  input, select, textarea {
+  input, select, textarea, a, button {
     @apply outline-none;
   }
 }
@@ -38,10 +38,11 @@
   .sidebar-nav-item {
     @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
            text-content-secondary transition-all duration-200 cursor-pointer
+           border border-transparent outline-none
            hover:bg-surface-hover hover:text-content-primary;
   }
   .sidebar-nav-item.active {
-    @apply bg-primary/15 text-primary border border-primary/20;
+    @apply bg-primary/15 text-primary border border-primary/20 outline-none;
   }
 
   /* --- Cards --- */
@@ -226,10 +227,11 @@
   }
   .tab-item {
     @apply px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
-           text-content-secondary hover:text-content-primary cursor-pointer;
+           text-content-secondary hover:text-content-primary cursor-pointer
+           border border-transparent outline-none;
   }
   .tab-item.active {
-    @apply bg-surface-card text-content-primary shadow-card border border-surface-border;
+    @apply bg-surface-card text-content-primary shadow-card border border-surface-border outline-none;
   }
 
   /* --- Notification items --- */

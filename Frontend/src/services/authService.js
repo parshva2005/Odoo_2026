@@ -35,7 +35,7 @@ const authService = {
   /**
    * Register — POST /api/auth/register
    */
-  register: async (payload) => {
+  register: async (_payload) => {
     // ── MOCK ──
     return { success: true, message: 'Account created. Admin will assign your role.' };
     // ── REAL ──

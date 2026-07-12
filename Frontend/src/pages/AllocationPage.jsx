@@ -1,30 +1,28 @@
 import { useState } from 'react';
 import { HiExclamationCircle, HiSwitchHorizontal, HiClock } from 'react-icons/hi';
-import { MOCK_ASSETS, MOCK_EMPLOYEES, MOCK_ALLOCATION_HISTORY } from '../constants/mockData';
+import { INITIAL_ASSETS, INITIAL_EMPLOYEES } from '../data/dummyData';
+import { useAllocations } from '../hooks/useAllocations';
 import Button from '../components/common/Button';
 import Select from '../components/common/Select';
 import { useToast } from '../context/ToastContext';
-import { clsx } from 'clsx';
 import Badge, { statusVariant } from '../components/common/Badge';
-
-const formatDate = (d) =>
-  new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+import { formatDate } from '../utils/formatters';
 
 export default function AllocationPage() {
   const { toast } = useToast();
+  const { history, addHistory } = useAllocations();
 
   const [selectedAssetId, setSelectedAssetId] = useState('');
   const [toEmployeeId,    setToEmployee]       = useState('');
   const [reason,          setReason]           = useState('');
   const [loading,         setLoading]          = useState(false);
-  const [history,         setHistory]          = useState(MOCK_ALLOCATION_HISTORY);
 
-  const selectedAsset  = MOCK_ASSETS.find((a) => String(a.id) === selectedAssetId);
+  const selectedAsset  = INITIAL_ASSETS.find((a) => String(a.id) === selectedAssetId);
   const isAllocated    = selectedAsset?.status === 'Allocated';
   const isMaintenance  = selectedAsset?.status === 'Maintenance';
 
-  const assetOptions   = MOCK_ASSETS.map((a) => ({ value: String(a.id), label: `${a.tag} – ${a.name}` }));
-  const employeeOptions= MOCK_EMPLOYEES.map((e) => ({ value: String(e.id), label: e.name }));
+  const assetOptions    = INITIAL_ASSETS.map((a)    => ({ value: String(a.id), label: `${a.tag} – ${a.name}` }));
+  const employeeOptions = INITIAL_EMPLOYEES.map((e) => ({ value: String(e.id), label: e.name }));
 
   const currentHolder  = selectedAsset?.assignedTo || null;
 
@@ -35,10 +33,8 @@ export default function AllocationPage() {
       return;
     }
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 800)); // Simulate API
-    const toEmp = MOCK_EMPLOYEES.find((e) => String(e.id) === toEmployeeId);
+    const toEmp = INITIAL_EMPLOYEES.find((e) => String(e.id) === toEmployeeId);
     const newEntry = {
-      id:         Date.now(),
       assetTag:   selectedAsset.tag,
       action:     isAllocated ? 'Transfer Requested' : 'Allocated',
       person:     toEmp?.name,
@@ -46,7 +42,7 @@ export default function AllocationPage() {
       date:       new Date().toISOString().slice(0, 10),
       condition:  'Good',
     };
-    setHistory((h) => [newEntry, ...h]);
+    await addHistory(newEntry);
     toast.success(isAllocated ? 'Transfer request submitted for approval.' : 'Asset allocated successfully!');
     setReason('');
     setToEmployee('');

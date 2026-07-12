@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { HiMail, HiLockClosed, HiEye, HiEyeOff } from 'react-icons/hi';
+import { HiMail, HiLockClosed, HiEye } from 'react-icons/hi';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import Input from '../../components/common/Input';
@@ -15,7 +15,6 @@ export default function LoginPage() {
   const [form,    setForm]    = useState({ email: '', password: '' });
   const [errors,  setErrors]  = useState({});
   const [loading, setLoading] = useState(false);
-  const [showPwd, setShowPwd] = useState(false);
 
   const validate = () => {
     const e = {};
@@ -28,15 +27,17 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
-
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
     setLoading(true);
     try {
-      await login(form);
+      await login(form.email, form.password);
       toast.success('Welcome back to AssetFlow!');
       navigate(ROUTES.DASHBOARD);
     } catch (err) {
-      toast.error(err?.message || 'Login failed. Please try again.');
+      toast.error(err.message || 'Login failed.');
     } finally {
       setLoading(false);
     }
@@ -54,39 +55,41 @@ export default function LoginPage() {
         <p className="text-sm text-content-muted mt-1">Enterprise Asset Management</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-        <Input
-          label="Email"
-          type="email"
-          placeholder="name@company.com"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          error={errors.email}
-          icon={HiMail}
-          required
-          autoComplete="email"
-        />
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-3">
+          <Input
+            label="Email Address"
+            type="email"
+            placeholder="name@company.com"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            error={errors.email}
+            icon={HiMail}
+            required
+            autoComplete="email"
+          />
 
-        <Input
-          label="Password"
-          type={showPwd ? 'text' : 'password'}
-          placeholder="••••••••••"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          error={errors.password}
-          icon={HiLockClosed}
-          iconRight={showPwd ? HiEyeOff : HiEye}
-          required
-          autoComplete="current-password"
-        />
+          <Input
+            label="Password"
+            type="password"
+            placeholder="••••••••••"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            error={errors.password}
+            icon={HiLockClosed}
+            iconRight={HiEye}
+            required
+            autoComplete="current-password"
+          />
 
-        <div className="flex justify-end -mt-1">
-          <button
-            type="button"
-            className="text-xs text-primary hover:text-primary-400 transition-colors"
-          >
-            Forgot password?
-          </button>
+          <div className="flex justify-end -mt-1">
+            <button
+              type="button"
+              className="text-xs text-primary hover:text-primary-400 transition-colors"
+            >
+              Forgot password?
+            </button>
+          </div>
         </div>
 
         <Button type="submit" className="w-full mt-2" loading={loading} size="lg">

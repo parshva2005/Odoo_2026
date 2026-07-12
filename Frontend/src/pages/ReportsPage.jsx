@@ -1,16 +1,15 @@
+import { useState, useEffect } from 'react';
 import { HiDownload, HiChartBar, HiChartPie, HiTrendingUp } from 'react-icons/hi';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
-  PieChart, Pie, Cell, LineChart, Line,
+  PieChart, Pie, Cell,
 } from 'recharts';
-import {
-  MOCK_ASSET_USAGE, MOCK_MAINTENANCE_CHART, MOCK_DASHBOARD_STATS,
-} from '../constants/mockData';
+import reportService from '../services/reportService';
 import Button from '../components/common/Button';
 import { StatCard } from '../components/common/Card';
 import { useToast } from '../context/ToastContext';
 import {
-  HiArchive, HiSwitchHorizontal, HiCog, HiCalendar,
+  HiArchive, HiCog, HiCalendar,
 } from 'react-icons/hi';
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -40,14 +39,23 @@ const UTILIZATION_DATA = [
 
 export default function ReportsPage() {
   const { toast } = useToast();
-  const s = MOCK_DASHBOARD_STATS;
+  const [summaryStats,     setSummaryStats]    = useState([]);
+  const [assetUsage,       setAssetUsage]      = useState([]);
+  const [maintenanceChart, setMaintenanceChart] = useState([]);
 
-  const summaryStats = [
-    { label: 'Total Assets',      value: s.availableAssets + s.allocatedAssets + s.maintenanceAssets, icon: HiArchive,         iconBg: 'bg-info/15 text-info' },
-    { label: 'Utilization Rate',  value: '70%',  icon: HiTrendingUp,        iconBg: 'bg-success/15 text-success' },
-    { label: 'Maintenance Costs', value: '₹1.2L', icon: HiCog,   iconBg: 'bg-warning/15 text-warning' },
-    { label: 'Active Bookings',   value: s.activeBookings, icon: HiCalendar, iconBg: 'bg-primary/15 text-primary' },
-  ];
+  // Fetch all report data from service on mount
+  useEffect(() => {
+    reportService.getSummaryStats().then((s) => {
+      setSummaryStats([
+        { label: 'Total Assets',      value: s.availableAssets + s.allocatedAssets + s.maintenanceAssets, icon: HiArchive,     iconBg: 'bg-info/15 text-info' },
+        { label: 'Utilization Rate',  value: '70%',   icon: HiTrendingUp, iconBg: 'bg-success/15 text-success' },
+        { label: 'Maintenance Costs', value: '₹1.2L', icon: HiCog,        iconBg: 'bg-warning/15 text-warning' },
+        { label: 'Active Bookings',   value: s.activeBookings, icon: HiCalendar, iconBg: 'bg-primary/15 text-primary' },
+      ]);
+    });
+    reportService.getAssetUsage().then(setAssetUsage);
+    reportService.getMaintenanceChart().then(setMaintenanceChart);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -79,7 +87,7 @@ export default function ReportsPage() {
             <HiChartBar size={15} className="text-primary" /> Asset Status Trend (6 months)
           </h3>
           <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={MOCK_ASSET_USAGE} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+            <BarChart data={assetUsage} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
               <XAxis dataKey="month" tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} />
@@ -100,13 +108,13 @@ export default function ReportsPage() {
           <ResponsiveContainer width="100%" height={160}>
             <PieChart>
               <Pie
-                data={MOCK_MAINTENANCE_CHART}
+                data={maintenanceChart}
                 cx="50%" cy="50%"
                 innerRadius={45} outerRadius={70}
                 paddingAngle={3}
                 dataKey="value"
               >
-                {MOCK_MAINTENANCE_CHART.map((entry, i) => (
+                {maintenanceChart.map((entry, i) => (
                   <Cell key={i} fill={entry.color} />
                 ))}
               </Pie>
@@ -114,7 +122,7 @@ export default function ReportsPage() {
             </PieChart>
           </ResponsiveContainer>
           <div className="space-y-1.5 mt-2">
-            {MOCK_MAINTENANCE_CHART.map((item) => (
+            {maintenanceChart.map((item) => (
               <div key={item.name} className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-sm" style={{ background: item.color }} />

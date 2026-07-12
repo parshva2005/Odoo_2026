@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { HiBell, HiSearch, HiMenuAlt2 } from 'react-icons/hi';
-import Sidebar from './Sidebar';
-import { useAuth } from '../context/AuthContext';
-import { MOCK_NOTIFICATIONS } from '../constants/mockData';
+import { HiBell } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
-import { ROUTES } from '../constants/routes';
+import Sidebar from './Sidebar';
+import { useAuth } from '../../context/AuthContext';
+import { ROUTES } from '../../constants/routes';
+import notificationService from '../../services/notificationService';
 
 // Human-readable page titles
 const PAGE_TITLES = {
@@ -22,11 +22,17 @@ const PAGE_TITLES = {
 
 export default function MainLayout() {
   const [collapsed, setCollapsed] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const { user } = useAuth();
   const location = useLocation();
-  const title    = PAGE_TITLES[location.pathname] || 'AssetFlow';
+  const title = PAGE_TITLES[location.pathname] || 'AssetFlow';
 
-  const unreadCount = MOCK_NOTIFICATIONS.filter((n) => !n.read).length;
+  // Load unread notification count from service (no hardcoded data)
+  useEffect(() => {
+    notificationService.getAll().then((notifications) => {
+      setUnreadCount(notifications.filter((n) => !n.read).length);
+    });
+  }, [location.pathname]); // refresh count on every page navigation
 
   return (
     <div className="flex h-screen bg-surface-base overflow-hidden">
