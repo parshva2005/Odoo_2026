@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==================== BASE STYLES ==================== */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-surface-base text-content-primary font-sans;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-surface-primary; }
+  ::-webkit-scrollbar-thumb { @apply bg-surface-border rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-content-muted; }
+
+  ::selection { @apply bg-primary/30 text-content-primary; }
+
+  input, select, textarea {
+    @apply outline-none;
+  }
+}
+
+/* ==================== COMPONENT STYLES ==================== */
+@layer components {
+
+  /* --- Sidebar --- */
+  .sidebar-nav-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+           text-content-secondary transition-all duration-200 cursor-pointer
+           hover:bg-surface-hover hover:text-content-primary;
+  }
+  .sidebar-nav-item.active {
+    @apply bg-primary/15 text-primary border border-primary/20;
+  }
+
+  /* --- Cards --- */
+  .card {
+    @apply bg-surface-card border border-surface-border rounded-xl
+           shadow-card transition-all duration-200;
+  }
+  .card-hover {
+    @apply hover:shadow-card-hover hover:border-surface-hover hover:-translate-y-0.5;
+  }
+
+  /* --- Buttons --- */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg
+           text-sm font-medium transition-all duration-200 cursor-pointer
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-primary text-white hover:bg-primary-600 active:bg-primary-700
+           shadow-glow-sm hover:shadow-glow;
+  }
+  .btn-secondary {
+    @apply btn bg-surface-overlay border border-surface-border
+           text-content-primary hover:bg-surface-hover hover:border-primary/30;
+  }
+  .btn-danger {
+    @apply btn bg-danger text-white hover:bg-danger-dark active:bg-red-800;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-content-secondary
+           hover:bg-surface-hover hover:text-content-primary;
+  }
+  .btn-outline-primary {
+    @apply btn border border-primary/50 text-primary
+           hover:bg-primary/10 hover:border-primary;
+  }
+  .btn-sm { @apply px-3 py-1.5 text-xs; }
+  .btn-lg { @apply px-6 py-3 text-base; }
+
+  /* --- Form Inputs --- */
+  .form-input {
+    @apply w-full px-3 py-2.5 bg-surface-elevated border border-surface-border
+           rounded-lg text-sm text-content-primary placeholder-content-muted
+           transition-all duration-200
+           focus:border-primary/50 focus:ring-2 focus:ring-primary/10;
+  }
+  .form-input:hover { @apply border-surface-hover; }
+  .form-label {
+    @apply block text-xs font-semibold text-content-secondary mb-1.5 uppercase tracking-wide;
+  }
+  .form-error { @apply text-xs text-danger mt-1; }
+
+  /* --- Badges --- */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold;
+  }
+  .badge-success { @apply badge bg-success/15 text-success border border-success/20; }
+  .badge-danger  { @apply badge bg-danger/15  text-danger  border border-danger/20;  }
+  .badge-warning { @apply badge bg-warning/15 text-warning border border-warning/20; }
+  .badge-info    { @apply badge bg-info/15    text-info    border border-info/20;    }
+  .badge-muted   { @apply badge bg-surface-overlay text-content-secondary border border-surface-border; }
+
+  /* --- Tables --- */
+  .table-wrapper {
+    @apply w-full overflow-x-auto rounded-xl border border-surface-border;
+  }
+  .table { @apply w-full border-collapse; }
+  .table thead tr {
+    @apply bg-surface-elevated border-b border-surface-border;
+  }
+  .table thead th {
+    @apply px-4 py-3 text-left text-xs font-semibold text-content-muted
+           uppercase tracking-wider whitespace-nowrap;
+  }
+  .table tbody tr {
+    @apply border-b border-surface-border/50 transition-colors duration-150
+           hover:bg-surface-hover/50;
+  }
+  .table tbody tr:last-child { @apply border-0; }
+  .table tbody td {
+    @apply px-4 py-3.5 text-sm text-content-primary;
+  }
+
+  /* --- Stats Cards --- */
+  .stat-card {
+    @apply card card-hover p-4 flex flex-col gap-2 cursor-default;
+  }
+  .stat-card .stat-label {
+    @apply text-xs font-semibold text-content-muted uppercase tracking-wider;
+  }
+  .stat-card .stat-value {
+    @apply text-3xl font-bold text-content-primary;
+  }
+  .stat-card .stat-icon {
+    @apply w-8 h-8 rounded-lg flex items-center justify-center;
+  }
+
+  /* --- Alert / Banner --- */
+  .alert-danger {
+    @apply flex items-center gap-2 px-4 py-3 rounded-lg
+           bg-danger/10 border border-danger/25 text-danger text-sm;
+  }
+  .alert-warning {
+    @apply flex items-center gap-2 px-4 py-3 rounded-lg
+           bg-warning/10 border border-warning/25 text-warning text-sm;
+  }
+  .alert-success {
+    @apply flex items-center gap-2 px-4 py-3 rounded-lg
+           bg-success/10 border border-success/25 text-success text-sm;
+  }
+  .alert-info {
+    @apply flex items-center gap-2 px-4 py-3 rounded-lg
+           bg-info/10 border border-info/25 text-info text-sm;
+  }
+
+  /* --- Kanban --- */
+  .kanban-column {
+    @apply flex flex-col gap-3 min-w-[200px] max-w-[220px] w-full;
+  }
+  .kanban-column-header {
+    @apply px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider
+           border border-surface-border text-center;
+  }
+  .kanban-card {
+    @apply card p-3 cursor-grab active:cursor-grabbing text-xs
+           hover:border-primary/30 hover:shadow-glow-sm transition-all duration-200;
+  }
+  .kanban-card.resolved {
+    @apply border-success/30 bg-success/5;
+  }
+
+  /* --- Modal --- */
+  .modal-overlay {
+    @apply fixed inset-0 z-50 flex items-center justify-center
+           bg-black/70 backdrop-blur-sm animate-fade-in;
+  }
+  .modal-box {
+    @apply bg-surface-card border border-surface-border rounded-2xl
+           shadow-modal w-full max-h-[90vh] overflow-y-auto animate-slide-in-up;
+  }
+
+  /* --- Page Header --- */
+  .page-header {
+    @apply flex items-center justify-between mb-6;
+  }
+  .page-title {
+    @apply text-2xl font-bold text-content-primary;
+  }
+  .page-subtitle {
+    @apply text-sm text-content-secondary mt-0.5;
+  }
+
+  /* --- Separator --- */
+  .separator {
+    @apply border-t border-surface-border my-4;
+  }
+
+  /* --- Loading Skeleton --- */
+  .skeleton {
+    @apply animate-pulse bg-surface-elevated rounded;
+  }
+
+  /* --- Timeline / Booking slots --- */
+  .booking-slot-booked {
+    @apply bg-primary/20 border border-primary/40 rounded-lg px-3 py-2
+           text-primary text-xs font-medium;
+  }
+  .booking-slot-conflict {
+    @apply border-2 border-dashed border-danger/60 rounded-lg px-3 py-2
+           text-danger text-xs font-medium bg-danger/5;
+  }
+  .booking-time-row {
+    @apply flex items-start gap-3 py-2 border-b border-surface-border/30;
+  }
+  .booking-time-label {
+    @apply text-xs text-content-muted w-12 shrink-0 pt-1;
+  }
+
+  /* --- Tab System --- */
+  .tab-list {
+    @apply flex gap-1 p-1 bg-surface-elevated rounded-xl border border-surface-border;
+  }
+  .tab-item {
+    @apply px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
+           text-content-secondary hover:text-content-primary cursor-pointer;
+  }
+  .tab-item.active {
+    @apply bg-surface-card text-content-primary shadow-card border border-surface-border;
+  }
+
+  /* --- Notification items --- */
+  .notification-item {
+    @apply flex gap-3 p-4 border-b border-surface-border/50
+           hover:bg-surface-hover/40 transition-colors duration-150;
+  }
+  .notification-item.unread {
+    @apply bg-primary/5;
+  }
+}
+
+/* ==================== UTILITY OVERRIDES ==================== */
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-primary-300 bg-clip-text text-transparent;
+  }
+  .glass {
+    @apply bg-gradient-glass backdrop-blur-sm;
+  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
