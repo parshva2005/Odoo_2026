@@ -1,5 +1,5 @@
-﻿using AssetFlow.Domain.Entities;
-using AssetFlow.Infrastructure.Data;
+﻿using Backend.Data;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace AssetFlow.API.Controllers
+namespace Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

@@ -1,5 +1,5 @@
-﻿using AssetFlow.Domain.Entities;
-using AssetFlow.Infrastructure.Data;
+﻿using Backend.Data;
+using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
