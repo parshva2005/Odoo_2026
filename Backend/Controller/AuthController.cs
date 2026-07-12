@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Backend.Controllers
+namespace Backend.Controller
 {
     [ApiController]
     [Route("api/[controller]")]

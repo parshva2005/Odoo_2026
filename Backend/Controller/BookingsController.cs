@@ -5,16 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace Backend.Controllers
+namespace Backend.Controller
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class MaintenanceController : ControllerBase
+    public class BookingController : ControllerBase
     {
         private readonly AssetFlowDbContext _context;
 
-        public MaintenanceController(AssetFlowDbContext context)
+        public BookingController(AssetFlowDbContext context)
         {
             _context = context;
         }
@@ -150,20 +150,4 @@ namespace Backend.Controllers
         }
     }
 
-    // ==========================================
-    // DTOs
-    // ==========================================
-    public class RaiseMaintenanceRequest
-    {
-        public int AssetId { get; set; }
-        public string IssueDescription { get; set; } = string.Empty;
-        public MaintenancePriority Priority { get; set; }
-        public string? PhotoUrl { get; set; }
-    }
-
-    public class UpdateMaintenanceStatusRequest
-    {
-        public MaintenanceStatus NewStatus { get; set; }
-        public string? TechnicianName { get; set; }
-    }
 }
