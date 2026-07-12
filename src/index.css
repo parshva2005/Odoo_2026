@@ -1,0 +1,390 @@
+/* 
+ * index.css
+ * Core design tokens, typography, grids, layout structures and styling overrides.
+ * Fits perfectly with Bootstrap 5 and models a clean Odoo/ERPNext administrative style.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --success: #16A34A;
+  --danger: #DC2626;
+  --warning: #F59E0B;
+  --bg-color: #F5F7FA;
+  --card-bg: #FFFFFF;
+  --text-main: #1F2937;
+  --text-muted: #6B7280;
+  --border-color: #E5E7EB;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  background-color: var(--bg-color) !important;
+  color: var(--text-main) !important;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 600 !important;
+  color: var(--text-main) !important;
+  letter-spacing: -0.2px;
+}
+
+/* Code layout fonts */
+code,
+pre,
+.font-monospace {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* ERP Layout Structure */
+.layout-container {
+  background-color: var(--bg-color) !important;
+}
+
+aside {
+  width: 260px !important;
+  min-height: calc(100vh - 60px) !important;
+  background-color: var(--card-bg) !important;
+  border-right: 1px solid var(--border-color) !important;
+  padding: 20px 14px !important;
+  transition: width 0.2s ease-in-out, padding 0.2s ease-in-out !important;
+}
+
+/* Collapse sidebar responsive rules */
+@media (max-width: 768px) {
+  aside {
+    width: 76px !important;
+    padding: 16px 8px !important;
+  }
+
+  aside span:last-child {
+    display: none !important;
+  }
+
+  aside .mt-4 {
+    display: none !important;
+  }
+
+  main {
+    padding: 16px !important;
+  }
+}
+
+/* NavLinks Active Theme styling */
+aside .nav-link {
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  color: var(--text-muted) !important;
+}
+
+aside .nav-link:hover {
+  background-color: #F3F4F6 !important;
+  color: var(--text-main) !important;
+}
+
+aside .nav-link.active {
+  background-color: #EEF2FF !important;
+  color: var(--primary) !important;
+  font-weight: 600 !important;
+}
+
+/* Cards customization */
+.card {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-radius: 12px !important;
+  padding: 24px !important;
+  margin-bottom: 24px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Modern tables overrides */
+.table-responsive {
+  border-radius: 12px !important;
+  border: 1px solid var(--border-color) !important;
+  overflow: hidden !important;
+  background-color: var(--card-bg) !important;
+}
+
+.table {
+  margin-bottom: 0 !important;
+  border-collapse: collapse !important;
+  width: 100% !important;
+}
+
+.table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: #F8FAFC !important;
+}
+
+.table thead th {
+  background-color: #F8FAFC !important;
+  border-bottom: 1.5px solid var(--border-color) !important;
+  padding: 12px 16px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  color: var(--text-muted) !important;
+  letter-spacing: 0.5px;
+}
+
+.table tbody tr {
+  transition: background-color 0.15s ease !important;
+}
+
+.table tbody tr:nth-of-type(odd) {
+  background-color: #FCFDFE !important;
+}
+
+.table tbody tr:nth-of-type(even) {
+  background-color: var(--card-bg) !important;
+}
+
+.table tbody tr:hover {
+  background-color: #F1F5F9 !important;
+}
+
+.table tbody td {
+  padding: 14px 16px !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-main) !important;
+  font-size: 13.5px !important;
+  vertical-align: middle !important;
+}
+
+/* Buttons custom override theme */
+.btn {
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+.btn:hover {
+  transform: translateY(-1px) !important;
+}
+
+.btn-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #FFFFFF !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+}
+
+.btn-success {
+  background-color: var(--success) !important;
+  border-color: var(--success) !important;
+  color: #FFFFFF !important;
+}
+
+.btn-success:hover {
+  background-color: #12823B !important;
+  border-color: #12823B !important;
+}
+
+.btn-danger {
+  background-color: var(--danger) !important;
+  border-color: var(--danger) !important;
+  color: #FFFFFF !important;
+}
+
+.btn-danger:hover {
+  background-color: #B91C1C !important;
+  border-color: #B91C1C !important;
+}
+
+/* Forms UI improvements */
+.form-control,
+.form-select,
+textarea {
+  border-radius: 8px !important;
+  border: 1px solid var(--border-color) !important;
+  padding: 10px 14px !important;
+  font-size: 14px !important;
+  color: var(--text-main) !important;
+  background-color: #FFFFFF !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+  outline: 0 !important;
+}
+
+.form-label {
+  font-weight: 500 !important;
+  color: var(--text-main) !important;
+  margin-bottom: 6px !important;
+  font-size: 13px !important;
+}
+
+/* Modern ERP Status Badges */
+.badge {
+  font-weight: 600 !important;
+  padding: 6px 12px !important;
+  border-radius: 6px !important;
+  font-size: 11px !important;
+  text-transform: capitalize !important;
+  letter-spacing: 0.2px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* Green: Available */
+.bg-success,
+.bg-success-subtle,
+[class*="status-available"],
+[class*="Available"] {
+  background-color: #DCFCE7 !important;
+  color: #16A34A !important;
+}
+
+/* Blue: Allocated */
+.bg-primary,
+.bg-primary-subtle,
+[class*="status-allocated"],
+[class*="Allocated"] {
+  background-color: #DBEAFE !important;
+  color: #2563EB !important;
+}
+
+/* Orange/Yellow: Reserved / Pending */
+.bg-warning,
+.bg-warning-subtle,
+[class*="status-reserved"],
+[class*="Reserved"],
+[class*="Pending"] {
+  background-color: #FEF3C7 !important;
+  color: #D97706 !important;
+}
+
+/* Purple: Maintenance / servicing */
+.bg-info,
+.bg-info-subtle,
+[class*="status-maintenance"],
+[class*="Maintenance"],
+[class*="Servicing"] {
+  background-color: #F3E8FF !important;
+  color: #7C3AED !important;
+}
+
+/* Red: Lost / critical */
+.bg-danger,
+.bg-danger-subtle,
+[class*="status-lost"],
+[class*="Lost"],
+[class*="Critical"] {
+  background-color: #FEE2E2 !important;
+  color: #DC2626 !important;
+}
+
+/* Gray: Retired */
+.bg-secondary,
+.bg-secondary-subtle,
+[class*="status-retired"],
+[class*="Retired"] {
+  background-color: #F3F4F6 !important;
+  color: #6B7280 !important;
+}
+
+/* Dark Gray: Disposed */
+[class*="status-disposed"],
+[class*="Disposed"] {
+  background-color: #E5E7EB !important;
+  color: #374151 !important;
+}
+
+/* Alerts panel styling */
+.alert {
+  border-radius: 8px !important;
+  border: 1px solid transparent !important;
+  padding: 12px 16px !important;
+  font-size: 13.5px !important;
+  margin-bottom: 20px !important;
+}
+
+.alert-success {
+  background-color: #DCFCE7 !important;
+  border-color: #BBF7D0 !important;
+  color: #15803D !important;
+}
+
+.alert-danger {
+  background-color: #FEE2E2 !important;
+  border-color: #FCA5A5 !important;
+  color: #B91C1C !important;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A0AEC0;
+}
+
+/* Standard keyframes transition */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-transition {
+  animation: fadeIn 0.2s ease-out forwards;
+}
