@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AssetFlow.Domain.Entities
+namespace Backend.Models
 {
     // =====================================================================
     // MULTI-TENANCY MARKER
