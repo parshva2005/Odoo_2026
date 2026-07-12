@@ -1,4 +1,6 @@
-﻿namespace AssetFlow.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AssetFlow.Domain.Entities
 {
     // =====================================================================
     // MULTI-TENANCY MARKER
@@ -38,6 +40,7 @@
 
     public class Client
     {
+        [Key]
         public Guid ClientId { get; set; } = Guid.NewGuid();
         public string CompanyName { get; set; } = null!;
         public string Subdomain { get; set; } = null!;      // e.g. "acme" -> acme.assetflow.app, used to resolve tenant
@@ -56,6 +59,7 @@
 
     public class Department : ITenantScoped
     {
+        [Key]
         public int DepartmentId { get; set; }
         public Guid ClientId { get; set; }
         public string Name { get; set; } = null!;
@@ -73,6 +77,7 @@
 
     public class Employee : ITenantScoped
     {
+        [Key]
         public int EmployeeId { get; set; }
         public Guid ClientId { get; set; }
         public string Name { get; set; } = null!;
@@ -88,6 +93,7 @@
 
     public class RoleChangeLog : ITenantScoped
     {
+        [Key]
         public int LogId { get; set; }
         public Guid ClientId { get; set; }
         public int EmployeeId { get; set; }
@@ -101,6 +107,7 @@
 
     public class AssetCategory : ITenantScoped
     {
+        [Key]
         public int CategoryId { get; set; }
         public Guid ClientId { get; set; }
         public string Name { get; set; } = null!;             // unique per tenant, not globally
@@ -118,6 +125,7 @@
 
     public class Asset : ITenantScoped
     {
+        [Key]
         public int AssetId { get; set; }
         public Guid ClientId { get; set; }
         public string AssetTag { get; set; } = null!;         // unique per tenant, not globally
@@ -152,6 +160,7 @@
 
     public class AssetDocument : ITenantScoped
     {
+        [Key]
         public int DocumentId { get; set; }
         public Guid ClientId { get; set; }
         public int AssetId { get; set; }
@@ -165,6 +174,7 @@
 
     public class AssetStatusHistory : ITenantScoped
     {
+        [Key]
         public int HistoryId { get; set; }
         public Guid ClientId { get; set; }
         public int AssetId { get; set; }
@@ -183,6 +193,7 @@
 
     public class AssetAllocation : ITenantScoped
     {
+        [Key]
         public int AllocationId { get; set; }
         public Guid ClientId { get; set; }
         public int AssetId { get; set; }
@@ -202,6 +213,7 @@
 
     public class TransferRequest : ITenantScoped
     {
+        [Key]
         public int TransferId { get; set; }
         public Guid ClientId { get; set; }
         public int AssetId { get; set; }
@@ -226,6 +238,7 @@
 
     public class ResourceBooking : ITenantScoped
     {
+        [Key]
         public int BookingId { get; set; }
         public Guid ClientId { get; set; }
         public int AssetId { get; set; }
@@ -246,6 +259,7 @@
 
     public class MaintenanceRequest : ITenantScoped
     {
+        [Key]
         public int RequestId { get; set; }
         public Guid ClientId { get; set; }
         public int AssetId { get; set; }
@@ -268,6 +282,7 @@
 
     public class MaintenanceStatusLog : ITenantScoped
     {
+        [Key]
         public int LogId { get; set; }
         public Guid ClientId { get; set; }
         public int RequestId { get; set; }
@@ -285,6 +300,7 @@
 
     public class AuditCycle : ITenantScoped
     {
+        [Key]
         public int AuditCycleId { get; set; }
         public Guid ClientId { get; set; }
         public string Name { get; set; } = null!;
@@ -317,6 +333,7 @@
 
     public class AuditCycleAsset : ITenantScoped
     {
+        [Key]
         public int AuditCycleAssetId { get; set; }
         public Guid ClientId { get; set; }
         public int AuditCycleId { get; set; }
@@ -332,6 +349,7 @@
 
     public class DiscrepancyReport : ITenantScoped
     {
+        [Key]
         public int DiscrepancyId { get; set; }
         public Guid ClientId { get; set; }
         public int AuditCycleId { get; set; }
@@ -353,6 +371,7 @@
 
     public class Notification : ITenantScoped
     {
+        [Key]
         public int NotificationId { get; set; }
         public Guid ClientId { get; set; }
         public int RecipientId { get; set; }
@@ -367,6 +386,7 @@
 
     public class ActivityLog : ITenantScoped
     {
+        [Key]
         public int LogId { get; set; }
         public Guid ClientId { get; set; }
         public int? ActorId { get; set; }
