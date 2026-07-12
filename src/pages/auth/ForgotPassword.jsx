@@ -76,41 +76,44 @@ export default function ForgotPassword() {
     };
 
     return (
-        <div className="container d-flex align-items-center justify-content-center min-vh-100" style={{ backgroundColor: '#f4f6f9' }}>
-            <div className="card shadow-sm p-4 w-100" style={{ maxWidth: '440px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+        <div className="d-flex align-items-center justify-content-center min-vh-100 w-100 position-fixed top-0 start-0 overflow-auto" style={{ background: 'radial-gradient(ellipse at top right, #1e293b, #090d16)', zIndex: 9999 }}>
+            <div className="card shadow-lg p-4 w-100 bg-white" style={{ maxWidth: '420px', borderRadius: '18px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
 
                 {/* Brand Logo */}
                 <div className="text-center mb-4">
-                    <h2 className="fw-bold mb-1" style={{ color: '#0f172a' }}>AssetFlow</h2>
-                    <p className="text-secondary small">Reset Account Password</p>
+                    <div className="d-inline-flex p-2.5 rounded-4 bg-primary-subtle text-primary mb-3">
+                        <span className="fw-bold fs-4">AF</span>
+                    </div>
+                    <h3 className="fw-bold mb-1" style={{ color: '#0f172a', letterSpacing: '-0.5px' }}>AssetFlow</h3>
+                    <p className="text-secondary small mb-0">Reset Account Password</p>
                 </div>
 
                 {/* Feedback Banners */}
                 {error && (
-                    <div className="alert alert-danger py-2 px-3 small mb-3" role="alert">
+                    <div className="alert alert-danger py-2 px-3 small mb-3 text-start animate-fade-in" role="alert">
                         {error}
                     </div>
                 )}
                 {success && (
-                    <div className="alert alert-success py-2 px-3 small mb-3" role="alert">
+                    <div className="alert alert-success py-2 px-3 small mb-3 text-start animate-fade-in" role="alert">
                         {success}
                     </div>
                 )}
 
                 {/* Stage 1 Form: Request Verification */}
                 {stage === 'request' && (
-                    <form onSubmit={handleRequestReset}>
-                        <p className="text-muted small mb-3 text-center">
+                    <form onSubmit={handleRequestReset} className="text-start">
+                        <p className="text-muted small mb-4 text-center">
                             Enter the email address registered with your account to simulate a password reset workflow.
                         </p>
 
                         <div className="mb-3">
-                            <label className="form-label text-secondary small fw-medium" htmlFor="email-input">Email Address</label>
+                            <label className="form-label text-secondary small fw-bold" htmlFor="email-input">Email Address</label>
                             <input
                                 type="email"
                                 className="form-control"
                                 id="email-input"
-                                placeholder="name@domain.com"
+                                placeholder="name@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
@@ -119,7 +122,7 @@ export default function ForgotPassword() {
 
                         <button
                             type="submit"
-                            className="btn btn-primary w-100 py-2 mb-3 fw-medium"
+                            className="btn btn-primary w-100 py-2.5 mb-3 fw-semibold mt-2"
                             disabled={loading}
                             style={{ backgroundColor: '#2563eb', borderColor: '#2563eb' }}
                         >
@@ -130,13 +133,13 @@ export default function ForgotPassword() {
 
                 {/* Stage 2 Form: Set New Password */}
                 {stage === 'reset' && (
-                    <form onSubmit={handleResetPassword}>
-                        <div className="alert alert-info py-2 px-3 small mb-3" role="alert" style={{ fontSize: '12px' }}>
+                    <form onSubmit={handleResetPassword} className="text-start">
+                        <div className="alert alert-info py-2 px-3 small mb-3 text-start fw-medium" role="alert" style={{ fontSize: '12px' }}>
                             Resetting password for: <strong>{email}</strong>
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label text-secondary small fw-medium" htmlFor="new-password">New Password</label>
+                            <label className="form-label text-secondary small fw-bold" htmlFor="new-password">New Password</label>
                             <input
                                 type="password"
                                 className="form-control"
@@ -149,7 +152,7 @@ export default function ForgotPassword() {
                         </div>
 
                         <div className="mb-3">
-                            <label className="form-label text-secondary small fw-medium" htmlFor="confirm-new-password">Confirm Password</label>
+                            <label className="form-label text-secondary small fw-bold" htmlFor="confirm-new-password">Confirm Password</label>
                             <input
                                 type="password"
                                 className="form-control"
@@ -163,7 +166,7 @@ export default function ForgotPassword() {
 
                         <button
                             type="submit"
-                            className="btn btn-primary w-100 py-2 mb-3 fw-medium"
+                            className="btn btn-primary w-100 py-2.5 mb-3 fw-semibold mt-2"
                             disabled={loading}
                             style={{ backgroundColor: '#2563eb', borderColor: '#2563eb' }}
                         >

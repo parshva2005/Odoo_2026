@@ -60,31 +60,34 @@ export default function Signup() {
     };
 
     return (
-        <div className="container d-flex align-items-center justify-content-center min-vh-100" style={{ backgroundColor: '#f4f6f9' }}>
-            <div className="card shadow-sm p-4 w-100" style={{ maxWidth: '480px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+        <div className="d-flex align-items-center justify-content-center min-vh-100 w-100 position-fixed top-0 start-0 overflow-auto" style={{ background: 'radial-gradient(ellipse at top right, #1e293b, #090d16)', zIndex: 9999, padding: '20px 0' }}>
+            <div className="card shadow-lg p-4 w-100 bg-white my-auto animate-fade-in" style={{ maxWidth: '480px', borderRadius: '18px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
 
                 {/* Logo and Typography */}
                 <div className="text-center mb-4">
-                    <h2 className="fw-bold mb-1" style={{ color: '#0f172a' }}>AssetFlow</h2>
-                    <p className="text-secondary small font-weight-normal">Register a New Account</p>
+                    <div className="d-inline-flex p-2.5 rounded-4 bg-primary-subtle text-primary mb-3">
+                        <span className="fw-bold fs-4">AF</span>
+                    </div>
+                    <h3 className="fw-bold mb-1" style={{ color: '#0f172a', letterSpacing: '-0.5px' }}>AssetFlow</h3>
+                    <p className="text-secondary small mb-0">Register a New Account</p>
                 </div>
 
                 {/* Status Messages */}
                 {error && (
-                    <div className="alert alert-danger py-2 px-3 small mb-3" role="alert">
+                    <div className="alert alert-danger py-2 px-3 small mb-3 text-start" role="alert">
                         {error}
                     </div>
                 )}
                 {success && (
-                    <div className="alert alert-success py-2 px-3 small mb-3" role="alert">
+                    <div className="alert alert-success py-2 px-3 small mb-3 text-start" role="alert">
                         {success}
                     </div>
                 )}
 
                 {/* Registration Form */}
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="text-start">
                     <div className="mb-3">
-                        <label className="form-label text-secondary small fw-medium" htmlFor="name-input">Full Name</label>
+                        <label className="form-label text-secondary small fw-bold" htmlFor="name-input">Full Name</label>
                         <input
                             type="text"
                             className="form-control"
@@ -97,7 +100,7 @@ export default function Signup() {
                     </div>
 
                     <div className="mb-3">
-                        <label className="form-label text-secondary small fw-medium" htmlFor="email-input">Email Address</label>
+                        <label className="form-label text-secondary small fw-bold" htmlFor="email-input">Email Address</label>
                         <input
                             type="email"
                             className="form-control"
@@ -111,7 +114,7 @@ export default function Signup() {
 
                     <div className="row">
                         <div className="col-md-6 mb-3">
-                            <label className="form-label text-secondary small fw-medium" htmlFor="role-select">Access Role</label>
+                            <label className="form-label text-secondary small fw-bold" htmlFor="role-select">Access Role</label>
                             <select
                                 className="form-select"
                                 id="role-select"
@@ -126,7 +129,7 @@ export default function Signup() {
                         </div>
 
                         <div className="col-md-6 mb-3">
-                            <label className="form-label text-secondary small fw-medium" htmlFor="dept-select">Department</label>
+                            <label className="form-label text-secondary small fw-bold" htmlFor="dept-select">Department</label>
                             <select
                                 className="form-select"
                                 id="dept-select"
@@ -143,7 +146,7 @@ export default function Signup() {
                     </div>
 
                     <div className="mb-3">
-                        <label className="form-label text-secondary small fw-medium" htmlFor="password-input">Password</label>
+                        <label className="form-label text-secondary small fw-bold" htmlFor="password-input">Password</label>
                         <input
                             type="password"
                             className="form-control"
@@ -156,7 +159,7 @@ export default function Signup() {
                     </div>
 
                     <div className="mb-3">
-                        <label className="form-label text-secondary small fw-medium" htmlFor="confirm-password-input">Confirm Password</label>
+                        <label className="form-label text-secondary small fw-bold" htmlFor="confirm-password-input">Confirm Password</label>
                         <input
                             type="password"
                             className="form-control"
@@ -170,7 +173,7 @@ export default function Signup() {
 
                     <button
                         type="submit"
-                        className="btn btn-primary w-100 py-2 mb-3 fw-medium"
+                        className="btn btn-primary w-100 py-2.5 mb-3 fw-semibold mt-2"
                         disabled={loading}
                         style={{ backgroundColor: '#2563eb', borderColor: '#2563eb' }}
                     >
