@@ -6,7 +6,7 @@
 ## 🚀 Quick Start
 
 ```bash
-cd assetflow-frontend
+cd Frontend
 npm install
 npm run dev
 ```
@@ -23,23 +23,28 @@ Open [http://localhost:5173](http://localhost:5173)
 
 ```
 src/
-├── components/common/     # Button, Input, Select, Modal, Badge, Card, DataTable, SearchBar, Pagination, Toast
+├── components/
+│   ├── common/            # Badge, Button, Card, DataTable, Input, Modal, Pagination, SearchBar, Select, Toast
+│   └── layout/            # AuthLayout, MainLayout, Sidebar
 ├── context/               # AuthContext, ToastContext
-├── constants/             # routes.js, apiEndpoints.js, mockData.js
-├── layouts/               # AuthLayout, MainLayout, Sidebar
+├── constants/             # routes.js, apiEndpoints.js
+├── data/                  # dummyData.js
+├── hooks/                 # useAllocations.js, useAssets.js, useNotifications.js
 ├── pages/
 │   ├── auth/              # LoginPage, RegisterPage
-│   ├── DashboardPage
-│   ├── OrganizationSetupPage
-│   ├── AssetsPage
-│   ├── AllocationPage
-│   ├── ResourceBookingPage
-│   ├── MaintenancePage
-│   ├── AuditPage
-│   ├── ReportsPage
-│   └── NotificationsPage
+│   ├── AllocationPage.jsx
+│   ├── AssetsPage.jsx
+│   ├── AuditPage.jsx
+│   ├── DashboardPage.jsx
+│   ├── MaintenancePage.jsx
+│   ├── NotificationsPage.jsx
+│   ├── OrganizationSetupPage.jsx
+│   ├── ReportsPage.jsx
+│   └── ResourceBookingPage.jsx
 ├── routes/                # AppRouter, ProtectedRoute
-├── services/              # api.js (Axios), authService.js
+├── services/              # api.js, authService.js, allocationService.js, assetService.js, auditService.js, bookingService.js, dashboardService.js, maintenanceService.js, notificationService.js, reportService.js
+├── utils/                 # formatters.js
+├── App.css
 ├── App.jsx
 ├── main.jsx
 └── index.css
@@ -47,7 +52,7 @@ src/
 
 ---
 
-## 🔌 Connecting to ASP.NET Core 8 Backend
+## 🔌 Connecting to ASP.NET Core 10 Backend
 
 ### 1. Update `.env`
 ```env
